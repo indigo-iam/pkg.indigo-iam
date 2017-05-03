@@ -34,7 +34,6 @@ cd /%{name}
 mvn -U clean package
 
 %install
-pwd
 cd ${RPM_BUILD_ROOT}
 mkdir -p var/lib/indigo/%{name}
 mkdir -p usr/lib/systemd/system

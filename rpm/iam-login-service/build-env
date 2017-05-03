@@ -1,7 +1,7 @@
 BUILD_NAME=iam-login-service
 BUILD_REPO=git://github.com/marcocaberletti/iam
 BUILD_TAG=fix/110
-PKG_REPO=file:///tmp/local_repo/pkg.indigo-iam.git
+PKG_REPO=git://github.com/marcocaberletti/pkg.indigo-iam.git
 PKG_TAG=master
 PKG_SPEC_FILE=iam-login-service/rpm/iam-login-service/iam-login-service.spec
 TARBALL_VERSION=0.6.0
