@@ -15,9 +15,9 @@ pipeline {
   stages{
     stage('package') {
       environment {
-        DATA_CONTAINER_NAME = 'stage-area-pkg.argus-${BUILD_NUMBER}'
+        DATA_CONTAINER_NAME = "stage-area-pkg.indigo-iam-${env.BUILD_NUMBER}"
         PKG_TAG = "${env.BRANCH_NAME}"
-        MVN_REPO_CONTAINER_NAME = 'mvn_repo-${BUILD_NUMBER}'
+        MVN_REPO_CONTAINER_NAME = "mvn_repo-${env.BUILD_NUMBER}"
         PLATFORM = "${params.PLATFORM}"
         COMPONENTS = "${params.COMPONENTS}"
         PKG_BUILD_NUMBER = "${params.PKG_BUILD_NUMBER}"
@@ -38,6 +38,12 @@ pipeline {
         sh 'docker rm -f ${DATA_CONTAINER_NAME} ${MVN_REPO_CONTAINER_NAME}'
         archiveArtifacts 'repo/**'
       }
+    }
+  }
+
+  post {
+    failure {
+      slackSend color: 'danger', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure (<${env.BUILD_URL}|Open>)"
     }
   }
 }
