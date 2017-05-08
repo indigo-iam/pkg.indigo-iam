@@ -7,8 +7,7 @@ pipeline {
   }
   
   parameters {
-    string(name: 'COMPONENTS', defaultValue: 'iam-login-service')
-    choice(name: 'PLATFORM', choices: 'centos7')
+    choice(name: 'INCLUDE_BUILD_NUMBER', choices: '0\n1', description: 'Flag to exclude/include build number.')
     string(name: 'PKG_BUILD_NUMBER', defaultValue: '', description: 'This is used to pass a custom build number that will be included in the package version.')
   }
 
@@ -18,10 +17,8 @@ pipeline {
         DATA_CONTAINER_NAME = "stage-area-pkg.indigo-iam-${env.BUILD_NUMBER}"
         PKG_TAG = "${env.BRANCH_NAME}"
         MVN_REPO_CONTAINER_NAME = "mvn_repo-${env.BUILD_NUMBER}"
-        PLATFORM = "${params.PLATFORM}"
-        COMPONENTS = "${params.COMPONENTS}"
+        INCLUDE_BUILD_NUMBER = "${params.INCLUDE_BUILD_NUMBER}"
         PKG_BUILD_NUMBER = "${params.PKG_BUILD_NUMBER}"
-        STAGE_ALL = '1'
       }
       
       steps {

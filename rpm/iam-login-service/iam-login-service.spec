@@ -1,13 +1,22 @@
 %define name            iam-login-service
 %define warversion      0.6.0
+%define base_version    0.6.0
+%define base_release    1
+
 %define user            iam
 
 %define jdk_version     1.8.0
 %define mvn_version     3.3.0
 
+%if %{?build_number:1}%{!?build_number:0}
+%define release_version 0.build.%{build_number}
+%else
+%define release_version %{base_release}
+%endif
+
 Name:		%{name}
-Version:	%{warversion}
-Release:	1%{?dist}
+Version:	%{base_version}
+Release:	%{release_version}%{?dist}
 Summary:	INDIGO Identity and Access Management Service.
 
 Group:		Applications/Web
@@ -69,4 +78,3 @@ systemctl daemon-reload
 %changelog
 * Thu Apr 27 2017 Marco Caberletti <marco.caberletti@cnaf.infn.it> 0.6.0
 - Initial IAM Login Service for Indigo 2.
-
