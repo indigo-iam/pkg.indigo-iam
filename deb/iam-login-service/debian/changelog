@@ -1,0 +1,6 @@
+iam-login-service (0.6.0-1) stable; urgency=low
+
+  * Initial IAM Login Service for Indigo 2.
+
+ -- Marco Caberletti <marco.caberletti@cnaf.infn.it>  Fri, 28 Apr 2017 14:25:00 +0200
+

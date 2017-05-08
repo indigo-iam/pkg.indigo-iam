@@ -1,0 +1,14 @@
+Source: iam-login-service
+Maintainer: INDIGO DataCloud
+Build-Depends: openjdk-8-jdk, maven, debhelper
+Section: web
+Standards-Version: 0.6.0
+Priority: optional
+
+Package: iam-login-service
+Architecture: all
+Depends: java8-runtime
+Description: INDIGO Identity and Access Management Service.
+ The INDIGO IAM (Identity and Access Management service) provides 
+ user identity and policy information to services so that consistent 
+ authorization decisions can be enforced across distributed services.

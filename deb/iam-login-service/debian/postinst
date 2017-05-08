@@ -1,0 +1,14 @@
+#!/bin/sh
+
+user="iam"
+name="iam-login-service"
+
+/usr/bin/id -u ${user} > /dev/null 2>&1
+if [ $? -eq 1 ]; then
+  useradd --comment "INDIGO IAM" --system --user-group --home-dir /var/lib/indigo/${name} --no-create-home --shell /sbin/nologin ${user}
+fi
+
+chown -R ${user}:${user} /var/lib/indigo/${name}
+
+systemctl daemon-reload
+

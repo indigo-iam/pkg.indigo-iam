@@ -1,0 +1,4 @@
+COMPONENTS="iam-login-service"
+PKG_TAG=master
+PKG_STAGE_DEBS=1
+#INCLUDE_BUILD_NUMBER=1
