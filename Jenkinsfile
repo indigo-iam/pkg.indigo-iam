@@ -10,7 +10,6 @@ pipeline {
     choice(name: 'INCLUDE_BUILD_NUMBER', choices: '0\n1', description: 'Flag to exclude/include build number.')
     string(name: 'PKG_BUILD_NUMBER', defaultValue: '', description: 'This is used to pass a custom build number that will be included in the package version.')
     choice(name: 'PLATFORM', choices: 'centos7\nubuntu1604', description: 'Build platform.')
-    booleanParam(name: 'USE_DOCKER_REGISTRY', defaultValue: true, description: 'Use private registry.')
   }
 
   stages{
@@ -22,19 +21,22 @@ pipeline {
         INCLUDE_BUILD_NUMBER = "${params.INCLUDE_BUILD_NUMBER}"
         PKG_BUILD_NUMBER = "${params.PKG_BUILD_NUMBER}"
         PLATFORM = "${params.PLATFORM}"
-        USE_DOCKER_REGISTRY = "${params.USE_DOCKER_REGISTRY}"
       }
       
       steps {
         git(url: 'https://github.com/marcocaberletti/pkg.indigo-iam.git', branch: env.BRANCH_NAME)
         sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} italiangrid/pkg.base:${PLATFORM}'
         sh 'docker create -v /m2-repository --name ${MVN_REPO_CONTAINER_NAME} italiangrid/pkg.base:${PLATFORM}'
-        sh '''
-          pushd rpm 
-          ls -al
-          sh build.sh
-          popd
-        '''
+        script {
+          def rundir = 'rpm'
+          if("ubuntu1604" == "${params.PLATFORM}") {
+            rundir = 'deb'
+          }
+          dir("${rundir}"){
+            sh "ls -al"
+            sh "sh build.sh"
+          }
+        }
         sh 'docker cp ${DATA_CONTAINER_NAME}:/stage-area repo'
         sh 'docker rm -f ${DATA_CONTAINER_NAME} ${MVN_REPO_CONTAINER_NAME}'
         archiveArtifacts 'repo/**'
