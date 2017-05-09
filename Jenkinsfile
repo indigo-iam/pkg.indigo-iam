@@ -10,7 +10,7 @@ pipeline {
     choice(name: 'INCLUDE_BUILD_NUMBER', choices: '0\n1', description: 'Flag to exclude/include build number.')
     string(name: 'PKG_BUILD_NUMBER', defaultValue: '', description: 'This is used to pass a custom build number that will be included in the package version.')
     choice(name: 'PLATFORM', choices: 'centos7\nubuntu1604', description: 'Build platform.')
-    booleanParam(name: 'USE_DOCKER_REGISTRY', defaultValue: true, descripion: 'Use private registry.')
+    booleanParam(name: 'USE_DOCKER_REGISTRY', defaultValue: true, description: 'Use private registry.')
   }
 
   stages{
