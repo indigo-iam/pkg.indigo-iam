@@ -64,6 +64,7 @@ chown -R %{user}:%{user} /var/lib/indigo/%{name}
 systemctl daemon-reload
 
 %preun
+systemctl stop %{name}
 
 %postun
 systemctl daemon-reload
