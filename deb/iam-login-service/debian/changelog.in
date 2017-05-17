@@ -1,4 +1,4 @@
-iam-login-service (0.6.0-1) stable; urgency=low
+iam-login-service (0.6.0-@@DEB_REVISION@@) stable; urgency=low
 
   * Initial IAM Login Service for Indigo 2.
 
