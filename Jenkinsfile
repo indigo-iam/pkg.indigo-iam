@@ -24,7 +24,8 @@ pipeline {
       }
       
       steps {
-        git(url: 'https://github.com/marcocaberletti/pkg.indigo-iam.git', branch: env.BRANCH_NAME)
+        cleanWs notFailBuild: true
+        checkout scm
         sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
         sh 'docker create -v /m2-repository --name ${MVN_REPO_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
         script {
