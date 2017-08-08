@@ -40,7 +40,7 @@ authorization decisions can be enforced across distributed services.
 sudo cp -r $HOME/sources/%{name} /
 sudo chown -R $(id -un):$(id -un) /%{name}
 cd /%{name}
-mvn -U clean package
+mvn -U -B clean package
 
 %install
 cd ${RPM_BUILD_ROOT}
