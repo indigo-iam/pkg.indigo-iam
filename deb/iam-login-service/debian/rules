@@ -13,16 +13,16 @@ export DH_VERBOSE=1
 	dh $@
 
 override_dh_auto_build:
-	sudo cp -r $(HOME)/sources/iam-login-service /
-	sudo chown -R $(BUILD_USER):$(BUILD_USER) /iam-login-service
-	cd /iam-login-service && \
-	mvn -U clean package
+	cd $(HOME)/sources/iam-login-service/iam-persistence && \
+	mvn -U -B clean install && \
+	cd $(HOME)/sources/iam-login-service && \
+	mvn -U -B clean package
 
 override_dh_auto_install:
 	mkdir -p debian/var/lib/indigo/iam-login-service debian/etc/default debian/lib/systemd/system && \
-	cp /iam-login-service/iam-login-service/target/iam-login-service.war debian/var/lib/indigo/iam-login-service/ && \
-	cp /iam-login-service/debian/etc/default/iam-login-service debian/etc/default/ && \
-	cp /iam-login-service/debian/lib/systemd/system/iam-login-service.service debian/lib/systemd/system/ 
+	cp $(HOME)/sources/iam-login-service/iam-login-service/target/iam-login-service.war debian/var/lib/indigo/iam-login-service/ && \
+	cp $(HOME)/sources/iam-login-service/debian/etc/default/iam-login-service debian/etc/default/ && \
+	cp $(HOME)/sources/iam-login-service/debian/lib/systemd/system/iam-login-service.service debian/lib/systemd/system/ 
 
 override_dh_auto_clean:
 	echo

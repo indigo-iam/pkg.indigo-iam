@@ -1,6 +1,6 @@
 %define name            iam-login-service
-%define warversion      0.6.0
-%define base_version    0.6.0
+%define warversion      1.0.0
+%define base_version    1.0.0
 %define base_release    1
 
 %define user            iam
@@ -37,9 +37,7 @@ authorization decisions can be enforced across distributed services.
 %prep
 
 %build
-sudo cp -r $HOME/sources/%{name} /
-sudo chown -R $(id -un):$(id -un) /%{name}
-cd /%{name}
+cd $HOME/sources/%{name}
 mvn -U -B clean package
 
 %install
@@ -47,9 +45,9 @@ cd ${RPM_BUILD_ROOT}
 mkdir -p var/lib/indigo/%{name}
 mkdir -p usr/lib/systemd/system
 mkdir -p etc/sysconfig
-cp /%{name}/%{name}/target/%{name}.war var/lib/indigo/%{name}
-cp /%{name}/rpm/SOURCES/%{name}.service usr/lib/systemd/system
-cp /%{name}/rpm/SOURCES/%{name} etc/sysconfig
+cp $HOME/sources/%{name}/%{name}/target/%{name}.war var/lib/indigo/%{name}
+cp $HOME/sources/%{name}/rpm/SOURCES/%{name}.service usr/lib/systemd/system
+cp $HOME/sources/%{name}/rpm/SOURCES/%{name} etc/sysconfig
 
 %clean
 
@@ -77,5 +75,8 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Tue Aug 8 2017 Marco Caberletti <marco.caberletti@cnaf.infn.it> 1.0.0
+- Release 1.0.0.
+
 * Thu Apr 27 2017 Marco Caberletti <marco.caberletti@cnaf.infn.it> 0.6.0
 - Initial IAM Login Service for Indigo 2.

@@ -1,3 +1,9 @@
+iam-login-service (1.0.0-@@DEB_REVISION@@) stable; urgency=low
+
+  * Release 1.0.0.
+
+ -- Marco Caberletti <marco.caberletti@cnaf.infn.it>  Tue, 8 Aug 2017 14:25:00 +0200
+
 iam-login-service (0.6.0-@@DEB_REVISION@@) stable; urgency=low
 
   * Initial IAM Login Service for Indigo 2.
