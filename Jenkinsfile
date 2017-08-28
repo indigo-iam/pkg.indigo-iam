@@ -17,9 +17,9 @@ pipeline {
   stages{
     stage('package') {
       environment {
-        DATA_CONTAINER_NAME = "stage-area-pkg.indigo-iam-${env.BUILD_NUMBER}"
+        DATA_CONTAINER_NAME = "stage-area-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
         PKG_TAG = "${env.BRANCH_NAME}"
-        MVN_REPO_CONTAINER_NAME = "mvn_repo-${env.BUILD_NUMBER}"
+        MVN_REPO_CONTAINER_NAME = "mvn_repo-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
         INCLUDE_BUILD_NUMBER = "${params.INCLUDE_BUILD_NUMBER}"
         PKG_BUILD_NUMBER = "${params.PKG_BUILD_NUMBER}"
         PLATFORM = "${params.PLATFORM}"
