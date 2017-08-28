@@ -17,9 +17,9 @@ pipeline {
   stages{
     stage('package') {
       environment {
-        DATA_CONTAINER_NAME = "stage-area-pkg.indigo-iam-${env.BUILD_NUMBER}"
+        DATA_CONTAINER_NAME = "stage-area-pkg.indigo-iam-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
         PKG_TAG = "${env.BRANCH_NAME}"
-        MVN_REPO_CONTAINER_NAME = "mvn_repo-${env.BUILD_NUMBER}"
+        MVN_REPO_CONTAINER_NAME = "mvn_repo-pkg.indigo-iam-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
         INCLUDE_BUILD_NUMBER = "${params.INCLUDE_BUILD_NUMBER}"
         PKG_BUILD_NUMBER = "${params.PKG_BUILD_NUMBER}"
         PLATFORM = "${params.PLATFORM}"
@@ -45,11 +45,27 @@ pipeline {
         archiveArtifacts 'repo/**'
       }
     }
+    
+    stage('result'){
+      steps {
+        script {
+          currentBuild.result = 'SUCCESS'
+        }
+      }
+    }
   }
 
   post {
     failure {
       slackSend color: 'danger', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure (<${env.BUILD_URL}|Open>)"
+    }
+    
+    changed {
+      script{
+        if('SUCCESS'.equals(currentBuild.result)) {
+          slackSend color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Back to normal (<${env.BUILD_URL}|Open>)"
+        }
+      }
     }
   }
 }

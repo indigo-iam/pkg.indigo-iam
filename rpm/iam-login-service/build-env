@@ -1,7 +1,7 @@
 BUILD_NAME=iam-login-service
-BUILD_REPO=git://github.com/indigo-iam/iam
-BUILD_TAG=v0.6.0
-PKG_REPO=git://github.com/marcocaberletti/pkg.indigo-iam.git
+BUILD_REPO=https://github.com/marcocaberletti/iam
+BUILD_TAG=fix/110
+PKG_REPO=https://github.com/marcocaberletti/pkg.indigo-iam.git
 PKG_TAG=v0.6.0
 PKG_SPEC_FILE=iam-login-service/rpm/iam-login-service/iam-login-service.spec
 PKG_STAGE_RPMS=1
