@@ -10,5 +10,5 @@ fi
 
 chown -R ${user}:${user} /var/lib/indigo/${name}
 
-systemctl daemon-reload
+systemctl daemon-reload || true
 
