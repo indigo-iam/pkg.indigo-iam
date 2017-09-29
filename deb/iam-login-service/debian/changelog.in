@@ -1,3 +1,9 @@
+iam-login-service (1.2.0-@@DEB_REVISION@@) stable; urgency=low
+
+  * Release 1.2.0.
+
+ -- Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it>  Fri, 29 Sep 2017 14:26:00 +0200
+
 iam-login-service (1.1.0-@@DEB_REVISION@@) stable; urgency=low
 
   * Release 1.1.0.

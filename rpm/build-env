@@ -1,7 +1,7 @@
 COMPONENTS="iam-login-service"
-PKG_TAG=v1.1.0
+PKG_TAG=develop
 PKG_STAGE_RPMS=1
-#INCLUDE_BUILD_NUMBER=1
+INCLUDE_BUILD_NUMBER=1
 #USE_DOCKER_REGISTRY=1
 #PKG_REPO=/code/pkg.indigo-iam
 #DOCKER_ARGS="-v ${HOME}/git/pkg.indigo-iam:/code/pkg.indigo-iam:ro"
