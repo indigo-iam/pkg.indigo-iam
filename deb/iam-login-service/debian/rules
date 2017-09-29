@@ -13,10 +13,8 @@ export DH_VERBOSE=1
 	dh $@
 
 override_dh_auto_build:
-	cd $(HOME)/sources/iam-login-service/iam-persistence && \
-	mvn -U -B clean install && \
 	cd $(HOME)/sources/iam-login-service && \
-	mvn -U -B clean package
+	mvn -U -B -DskipTests clean install 
 
 override_dh_auto_install:
 	mkdir -p debian/var/lib/indigo/iam-login-service debian/etc/default debian/lib/systemd/system && \

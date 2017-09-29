@@ -1,6 +1,6 @@
 %define name            iam-login-service
-%define warversion      1.0.0
-%define base_version    1.0.0
+%define warversion      1.1.0
+%define base_version    1.1.0
 %define base_release    1
 
 %define user            iam
@@ -38,7 +38,7 @@ authorization decisions can be enforced across distributed services.
 
 %build
 cd $HOME/sources/%{name}
-mvn -U -B clean package
+mvn -U -B -DskipTests clean package
 
 %install
 cd ${RPM_BUILD_ROOT}
@@ -75,6 +75,9 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Fri Sep 29 2017 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.1.0
+- Release 1.1.0.
+
 * Tue Aug 8 2017 Marco Caberletti <marco.caberletti@cnaf.infn.it> 1.0.0
 - Release 1.0.0.
 

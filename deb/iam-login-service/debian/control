@@ -2,7 +2,7 @@ Source: iam-login-service
 Maintainer: INDIGO DataCloud
 Build-Depends: openjdk-8-jdk, maven, debhelper
 Section: web
-Standards-Version: 1.0.0
+Standards-Version: 1.1.0
 Priority: optional
 
 Package: iam-login-service
