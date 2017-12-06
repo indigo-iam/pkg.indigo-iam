@@ -23,26 +23,29 @@ pipeline {
         INCLUDE_BUILD_NUMBER = "${params.INCLUDE_BUILD_NUMBER}"
         PKG_BUILD_NUMBER = "${params.PKG_BUILD_NUMBER}"
         PLATFORM = "${params.PLATFORM}"
+        DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
       }
       
       steps {
-        cleanWs notFailBuild: true
-        checkout scm
-        sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
-        sh 'docker create -v /m2-repository --name ${MVN_REPO_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
-        script {
-          def rundir = 'rpm'
-          if("ubuntu1604" == "${params.PLATFORM}") {
-            rundir = 'deb'
+        container('docker-runner'){
+          cleanWs notFailBuild: true
+          checkout scm
+          sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
+          sh 'docker create -v /m2-repository --name ${MVN_REPO_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
+          script {
+            def rundir = 'rpm'
+            if("ubuntu1604" == "${params.PLATFORM}") {
+              rundir = 'deb'
+            }
+            dir("${rundir}"){
+              sh "ls -al"
+              sh "sh build.sh"
+            }
           }
-          dir("${rundir}"){
-            sh "ls -al"
-            sh "sh build.sh"
-          }
+          sh 'docker cp ${DATA_CONTAINER_NAME}:/stage-area repo'
+          sh 'docker rm -f ${DATA_CONTAINER_NAME} ${MVN_REPO_CONTAINER_NAME}'
+          archiveArtifacts 'repo/**'
         }
-        sh 'docker cp ${DATA_CONTAINER_NAME}:/stage-area repo'
-        sh 'docker rm -f ${DATA_CONTAINER_NAME} ${MVN_REPO_CONTAINER_NAME}'
-        archiveArtifacts 'repo/**'
       }
     }
     
