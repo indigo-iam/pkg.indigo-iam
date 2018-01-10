@@ -4,7 +4,7 @@ pipeline {
   agent { label 'docker' }
 
   options {
-    timeout(time: 1, unit: 'HOURS')
+    timeout(time: 3, unit: 'HOURS')
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   
