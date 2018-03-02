@@ -1,6 +1,6 @@
 %define name            iam-login-service
-%define warversion      1.2.0
-%define base_version    1.2.0
+%define warversion      1.2.1
+%define base_version    1.2.1
 %define base_release    1
 
 %define user            iam
@@ -75,6 +75,9 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Fri Mar 2 2018 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.2.1
+- Release 1.2.1
+
 * Thu Jan 25 2018 Marco Caberletti <marco.caberletti@cnaf.infn.it> 1.2.0
 - Release 1.2.0
 
