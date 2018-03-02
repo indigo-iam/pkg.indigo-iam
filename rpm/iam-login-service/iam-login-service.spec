@@ -1,6 +1,6 @@
 %define name            iam-login-service
-%define warversion      1.2.0
-%define base_version    1.2.0
+%define warversion      1.3.0
+%define base_version    1.3.0
 %define base_release    1
 
 %define user            iam
