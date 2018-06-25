@@ -5,4 +5,4 @@ PKG_REPO=https://github.com/indigo-iam/pkg.indigo-iam
 PKG_TAG=develop
 PKG_SPEC_FILE=iam-login-service/deb/iam-login-service/debian
 PKG_STAGE_DEBS=1
-TARBALL_VERSION=1.2.0
+TARBALL_VERSION=1.5.0

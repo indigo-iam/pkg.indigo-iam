@@ -23,6 +23,7 @@ pipeline {
         INCLUDE_BUILD_NUMBER = "${params.INCLUDE_BUILD_NUMBER}"
         PKG_BUILD_NUMBER = "${params.PKG_BUILD_NUMBER}"
         PLATFORM = "${params.PLATFORM}"
+        DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
       }
       
       steps {
