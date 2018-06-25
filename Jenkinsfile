@@ -26,30 +26,24 @@ pipeline {
       }
       
       steps {
-        cleanWs notFailBuild: true
-        checkout scm
-        sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
-        sh 'docker create -v /m2-repository --name ${MVN_REPO_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
-        script {
-          def rundir = 'rpm'
-          if("ubuntu1604" == "${params.PLATFORM}") {
-            rundir = 'deb'
-          }
-          dir("${rundir}"){
-            sh "ls -al"
-            sh "sh build.sh"
-          }
-        }
-        sh 'docker cp ${DATA_CONTAINER_NAME}:/stage-area repo'
-        sh 'docker rm -f ${DATA_CONTAINER_NAME} ${MVN_REPO_CONTAINER_NAME}'
-        archiveArtifacts 'repo/**'
-      }
-    }
-    
-    stage('result'){
-      steps {
-        script {
-          currentBuild.result = 'SUCCESS'
+      	container('docker-runner'){
+	      cleanWs notFailBuild: true
+	      checkout scm
+	      sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
+	      sh 'docker create -v /m2-repository --name ${MVN_REPO_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
+	      script {
+	        def rundir = 'rpm'
+	        if("ubuntu1604" == "${params.PLATFORM}") {
+	          rundir = 'deb'
+	        }
+	        dir("${rundir}"){
+	          sh "ls -al"
+	          sh "sh build.sh"
+	        }
+	      }
+	      sh 'docker cp ${DATA_CONTAINER_NAME}:/stage-area repo'
+	      sh 'docker rm -f ${DATA_CONTAINER_NAME} ${MVN_REPO_CONTAINER_NAME}'
+	      archiveArtifacts 'repo/**'
         }
       }
     }
@@ -62,7 +56,7 @@ pipeline {
     
     changed {
       script{
-        if('SUCCESS'.equals(currentBuild.result)) {
+        if('SUCCESS'.equals(currentBuild.currentResult)) {
           slackSend color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Back to normal (<${env.BUILD_URL}|Open>)"
         }
       }
