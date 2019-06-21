@@ -1,7 +1,14 @@
 #!/usr/bin/env groovy
 
 pipeline {
-  agent { label 'docker' }
+  agent {
+      kubernetes {
+          label "pkg.indigo-iam-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
+          cloud 'Kube mwdevel'
+          defaultContainer 'jnlp'
+          inheritFrom 'ci-template'
+      }
+  }
 
   options {
     timeout(time: 1, unit: 'HOURS')
@@ -27,7 +34,7 @@ pipeline {
       }
       
       steps {
-      	container('docker-runner'){
+      	container('runner'){
 	      cleanWs notFailBuild: true
 	      checkout scm
 	      sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
