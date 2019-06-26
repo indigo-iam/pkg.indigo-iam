@@ -1,11 +1,13 @@
 #!/usr/bin/env groovy
+@Library('sd')_
+def kubeLabel = getKubeLabel()
 
 pipeline {
   agent {
       kubernetes {
-          label "pkg.indigo-iam-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
+          label "${kubeLabel}"
           cloud 'Kube mwdevel'
-          defaultContainer 'jnlp'
+          defaultContainer 'runner'
           inheritFrom 'ci-template'
       }
   }
@@ -34,7 +36,6 @@ pipeline {
       }
       
       steps {
-      	container('runner'){
 	      cleanWs notFailBuild: true
 	      checkout scm
 	      sh 'docker create -v /stage-area --name ${DATA_CONTAINER_NAME} ${DOCKER_REGISTRY_HOST}/italiangrid/pkg.base:${PLATFORM}'
@@ -52,7 +53,6 @@ pipeline {
 	      sh 'docker cp ${DATA_CONTAINER_NAME}:/stage-area repo'
 	      sh 'docker rm -f ${DATA_CONTAINER_NAME} ${MVN_REPO_CONTAINER_NAME}'
 	      archiveArtifacts 'repo/**'
-        }
       }
     }
   }
