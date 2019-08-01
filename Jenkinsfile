@@ -1,15 +1,7 @@
 #!/usr/bin/env groovy
-@Library('sd')_
-def kubeLabel = getKubeLabel()
-
 pipeline {
   agent {
-      kubernetes {
-          label "${kubeLabel}"
-          cloud 'Kube mwdevel'
-          defaultContainer 'runner'
-          inheritFrom 'ci-template'
-      }
+    label 'docker'
   }
 
   options {
