@@ -37,14 +37,15 @@ pipeline {
           withCredentials([
             usernamePassword(credentialsId: 'jenkins-nexus', passwordVariable: 'nxPassword', usernameVariable: 'nxUsername')
           ]) {
+            
+            script {
+              def repo="${env.CI_REPO}/${env.BUILD_TAG}.replaceAll('jenkins-','')"
 
-            def repo="${env.CI_REPO}/${env.BUILD_TAG}.replaceAll('jenkins-','')"
-
-            sh """#!/bin/bash 
-            set -ex
-            TARGET_REPO=${repo} NX_USERNAME=${nxUsername} NX_PASSWORD=${nxPassword} ./upload-packages.sh
-            """
-
+              sh """#!/bin/bash 
+              set -ex
+              TARGET_REPO=${repo} NX_USERNAME=${nxUsername} NX_PASSWORD=${nxPassword} ./upload-packages.sh
+              """
+            }
           }
       }
     }
