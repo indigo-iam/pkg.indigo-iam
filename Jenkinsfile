@@ -17,7 +17,9 @@ pipeline {
     RPM_PLATFORMS = "centos7 centos8"
     DEB_PLATFORMS = ""
     NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
-    TARGET_REPO = "indigo-iam-ci-builds"
+    CI_REPO = "indigo-iam-rpm-ci"
+    BETA_REPO = "indigo-iam-rpm-beta"
+    STABLE_REPO = "indigo-iam-rpm-stable"
   }
 
   stages{
@@ -30,13 +32,12 @@ pipeline {
       }
     }
 
-    stage('publish') {
-      
+    stage('publish-ci') {
       steps {
           withCredentials([
             usernamePassword(credentialsId: 'jenkins-nexus', passwordVariable: 'nxPassword', usernameVariable: 'nxUsername')
           ]) {
-            sh "NX_USERNAME=\"${nxUsername}\" NX_PASSWORD=\"${nxPassword}\" ./upload-packages.sh"
+            sh "TARGET_REPO=\"${CI_REPO}/$(echo ${BUILD_TAG} | sed 's/^jenkins-//')\" NX_USERNAME=\"${nxUsername}\" NX_PASSWORD=\"${nxPassword}\" ./upload-packages.sh"
           }
       }
     }
