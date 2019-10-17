@@ -12,6 +12,7 @@ if [ -n "${PKG_CI_MODE}" ]; then
 
   rm -rf artifacts
   mkdir -p artifacts/packages artifacts/stage-area 
+  chmod 777 artifacts/packages artifacts/stage-area
 
   volumes_conf="-v $(pwd)/artifacts/packages:/packages"
   volumes_conf="${volumes_conf} -v $(pwd)/artifacts/stage-area:/stage-area"
