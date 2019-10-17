@@ -10,16 +10,18 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
   
+  environment {
+    PKG_TAG = "${env.BRANCH_NAME}"
+    PKG_CI_MODE = "y"
+    DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
+    RPM_PLATFORMS = "centos7 centos8"
+    DEB_PLATFORMS = ""
+    NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
+    TARGET_REPO = "indigo-iam-ci-builds"
+  }
+
   stages{
     stage('package') {
-      environment {
-        PKG_TAG = "${env.BRANCH_NAME}"
-        PKG_CI_MODE = "y"
-        DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
-        NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
-        TARGET_REPO = "indigo-iam-ci-builds"
-      }
-      
       steps {
 	      cleanWs notFailBuild: true
 	      checkout scm
@@ -29,12 +31,6 @@ pipeline {
     }
 
     stage('publish') {
-      environment {
-        PKG_TAG = "${env.BRANCH_NAME}"
-        PKG_CI_MODE = "y"
-        DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
-        RPM_PLATFORMS = "centos7 centos8"
-      }
       
       steps {
           withCredentials([
