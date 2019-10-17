@@ -12,7 +12,6 @@ if [ -n "${PKG_CI_MODE}" ]; then
 
   rm -rf artifacts
   mkdir -p artifacts/packages artifacts/stage-area 
-  mkdir -p ${M2_REPO_DIR}
 
   volumes_conf="-v $(pwd)/artifacts/packages:/packages"
   volumes_conf="${volumes_conf} -v $(pwd)/artifacts/stage-area:/stage-area"
