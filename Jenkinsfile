@@ -16,7 +16,7 @@ pipeline {
         PKG_TAG = "${env.BRANCH_NAME}"
         PKG_CI_MODE = "y"
         DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
-        NEXUS_REPO = "https://repo.cloud.cnaf.infn.it"
+        NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
         TARGET_REPO = "indigo-iam-ci-builds"
       }
       
