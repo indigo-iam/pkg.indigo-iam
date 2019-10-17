@@ -20,6 +20,7 @@ pipeline {
     STABLE_REPO = "indigo-iam-rpm-stable"
     PKG_NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
     PKG_NEXUS_CRED = credentials('jenkins-nexus')
+    DOCKER_ARGS = "--rm -v /opt/cnafsd/helper-scripts/scripts/:/usr/local/bin "
   }
 
   stages{
