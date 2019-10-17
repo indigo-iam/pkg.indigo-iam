@@ -66,7 +66,7 @@ pipeline {
 
     stage('publish-beta') {
       when {
-        tag pattern 'v\\d.*-beta', comparator: "REGEXP"
+        tag pattern: 'v\\d.*-beta', comparator: "REGEXP"
       }
 
       environment {
@@ -81,7 +81,7 @@ pipeline {
 
     stage('publish-stable') {
       when {
-        tag pattern 'v\\d.*-stable', comparator: "REGEXP"
+        tag pattern: 'v\\d.*-stable', comparator: "REGEXP"
       }
 
       environment {
