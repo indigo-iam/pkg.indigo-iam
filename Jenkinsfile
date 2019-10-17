@@ -16,6 +16,7 @@ pipeline {
         PKG_TAG = "${env.BRANCH_NAME}"
         PKG_CI_MODE = "y"
         DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
+        NEXUS_REPO = "https://repo.cloud.cnaf.infn.it"
         TARGET_REPO = "indigo-iam-ci-builds"
       }
       
@@ -39,15 +40,7 @@ pipeline {
           withCredentials([
             usernamePassword(credentialsId: 'jenkins-nexus', passwordVariable: 'nxPassword', usernameVariable: 'nxUsername')
           ]) {
-
-            sh """#!/bin/bash
-            set -ex
-            for p in ${env.RPM_PLATFORMS}; do
-              nexus-assets-flat-upload -u ${nxUsername} -p ${nxPassword} \
-                -H ${env.NEXUS_HOST} \
-                -r ${env.TARGET_REPO}/${env.BUILD_TAG}/\${p} \
-                -d artifacts/packages/\${p}/RPMS
-            """
+            sh "NX_USERNAME=\"${nxUsername}\" NX_PASSWORD=\"${nxPassword}\" ./upload-packages.sh"
           }
       }
     }
