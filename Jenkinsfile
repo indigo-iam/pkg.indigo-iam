@@ -38,9 +38,10 @@ pipeline {
             usernamePassword(credentialsId: 'jenkins-nexus', passwordVariable: 'nxPassword', usernameVariable: 'nxUsername')
           ]) {
 
+            def repo="${env.CI_REPO}/${env.BUILD_TAG}.replaceAll('jenkins-','')"
+
             sh """#!/bin/bash 
             set -ex
-            repo=${CI_REPO}/`echo ${BUILD_TAG} | sed 's/^jenkins-//'`
             TARGET_REPO=${repo} NX_USERNAME=${nxUsername} NX_PASSWORD=${nxPassword} ./upload-packages.sh
             """
 
