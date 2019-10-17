@@ -14,8 +14,7 @@ pipeline {
     stage('package') {
       environment {
         PKG_TAG = "${env.BRANCH_NAME}"
-	STAGE_AREA_VOLUME_NAME = "stage-area-pkg.indigo-iam-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
-        MVN_REPO_VOLUME_NAME = "mvn_repo-pkg.indigo-iam-${env.JOB_BASE_NAME}-${env.BUILD_NUMBER}"
+        PKG_CI_MODE = "y"
         DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
       }
       
@@ -23,6 +22,7 @@ pipeline {
 	      cleanWs notFailBuild: true
 	      checkout scm
 	      sh 'build.sh'
+              archiveArtifacts 'artifacts/**'
       }
     }
   }
