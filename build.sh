@@ -52,6 +52,7 @@ if [ -n "${PKG_CI_MODE}" ]; then
   volumes_conf="${volumes_conf} -v $(pwd)/artifacts/stage-area:/chown/stage-area"
 
   user_id=$(id -u)
-  docker run -i ${volumes_conf} italiangrid/pkg.base:centos7 "chown -R ${user_id} /chown/'*'"
+  user_gid=$(id -g)
+  docker run -i ${volumes_conf} italiangrid/pkg.base:centos7 "chown -R ${user_id}:${user_gid} "'/chown'
 
 fi
