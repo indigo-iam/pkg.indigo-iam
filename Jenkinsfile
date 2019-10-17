@@ -12,14 +12,16 @@ pipeline {
   
   environment {
     PKG_TAG = "${env.BRANCH_NAME}"
-    PKG_CI_MODE = "y"
     DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
-    RPM_PLATFORMS = "centos7 centos8"
+    RPM_PLATFORMS = "centos7"
     DEB_PLATFORMS = ""
-    NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
     CI_REPO = "indigo-iam-rpm-ci"
     BETA_REPO = "indigo-iam-rpm-beta"
     STABLE_REPO = "indigo-iam-rpm-stable"
+    PKG_NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
+    PKG_NEXUS_CRED = credentials('jenkins-nexus')
+    PKG_NEXUS_USERNAME = ${env.PKG_NEXUS_CRED_USR}
+    PKG_NEXUS_PASSWORD = ${env.PKG_NEXUS_CRED_PSW}
   }
 
   stages{
@@ -28,26 +30,17 @@ pipeline {
 	      cleanWs notFailBuild: true
 	      checkout scm
 	      sh './build.sh'
-              archiveArtifacts 'artifacts/**'
       }
     }
 
     stage('publish-ci') {
+      environment {
+        PKG_PUBLISH_PACKAGES = "y"
+        PKG_NEXUS_REPONAME = "${env.CI_REPO}/${env.BUILD_TAG}"
+        PKG_TARGET = "make publish-rpm"
+      }
       steps {
-          withCredentials([
-            usernamePassword(credentialsId: 'jenkins-nexus', passwordVariable: 'nxPassword', usernameVariable: 'nxUsername')
-          ]) {
-            
-            script {
-              def buildTag=${env.BUILD_TAG}.replaceAll('jenkins-','')
-              def targetRepo="${env.CI_REPO}/${buildTag}"
-
-              sh """#!/bin/bash 
-              set -ex
-              TARGET_REPO=${repo} NX_USERNAME=${nxUsername} NX_PASSWORD=${nxPassword} ./upload-packages.sh
-              """
-            }
-          }
+        sh './build.sh'
       }
     }
   }
