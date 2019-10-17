@@ -4,6 +4,8 @@ set -ex
 RPM_PLATFORMS=${RPM_PLATFORMS:-"centos7 centos8"}
 DEB_PLATFORMS=${DEB_PLATFORMS:-"ubuntu1604"}
 
+export DOCKER_ARGS=${DOCKER_ARGS:-"--rm"}
+
 if [ -n "${PKG_CI_MODE}" ]; then
 
   M2_VOLUME=${M2_VOLUME:-m2-repo-pkg.indigo-iam}
@@ -44,3 +46,12 @@ for p in ${DEB_PLATFORMS}; do
   popd
 done
 
+if [ -n "${PKG_CI_MODE}" ]; then
+  volumes_conf=""
+  volumes_conf="-v $(pwd)/artifacts/packages:/chown/packages"
+  volumes_conf="${volumes_conf} -v $(pwd)/artifacts/stage-area:/chown/stage-area"
+
+  user_id=$(id -u)
+  docker run -i ${volumes_conf} italiangrid/pkg.base:centos7 "chown -R ${user_id} /chown/'*'"
+
+fi

@@ -39,7 +39,8 @@ pipeline {
           ]) {
             
             script {
-              def repo="${env.CI_REPO}/${env.BUILD_TAG}.replaceAll('jenkins-','')"
+              def buildTag=${env.BUILD_TAG}.replaceAll('jenkins-','')
+              def targetRepo="${env.CI_REPO}/${buildTag}"
 
               sh """#!/bin/bash 
               set -ex
