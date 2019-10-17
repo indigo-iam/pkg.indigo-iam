@@ -16,6 +16,7 @@ pipeline {
         PKG_TAG = "${env.BRANCH_NAME}"
         PKG_CI_MODE = "y"
         DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
+        TARGET_REPO = "indigo-iam-ci-builds"
       }
       
       steps {
@@ -23,6 +24,31 @@ pipeline {
 	      checkout scm
 	      sh './build.sh'
               archiveArtifacts 'artifacts/**'
+      }
+    }
+
+    stage('publish') {
+      environment {
+        PKG_TAG = "${env.BRANCH_NAME}"
+        PKG_CI_MODE = "y"
+        DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
+        RPM_PLATFORMS = "centos7 centos8"
+      }
+      
+      steps {
+          withCredentials([
+            usernamePassword(credentialsId: 'jenkins-nexus', passwordVariable: 'nxPassword', usernameVariable: 'nxUsername')
+          ]) {
+
+            sh """#!/bin/bash
+            set -ex
+            for p in ${env.RPM_PLATFORMS}; do
+              nexus-assets-flat-upload -u ${nxUsername} -p ${nxPassword} \
+                -H ${env.NEXUS_HOST} \
+                -r ${env.TARGET_REPO}/${env.BUILD_TAG}/\${p} \
+                -d artifacts/packages/\${p}/RPMS
+            """
+          }
       }
     }
   }
