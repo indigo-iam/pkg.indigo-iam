@@ -18,7 +18,7 @@ pipeline {
     PKG_TAG = "${env.BRANCH_NAME}"
     DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
     RPM_PLATFORMS = "centos7 centos8"
-    DEB_PLATFORMS = ""
+    DEB_PLATFORMS = "ubuntu1604"
     CI_REPO = "indigo-iam-rpm-ci"
     NIGHTLY_REPO = "indigo-iam-rpm-nightly"
     BETA_REPO = "indigo-iam-rpm-beta"
