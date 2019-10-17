@@ -6,9 +6,9 @@ DEB_PLATFORMS=${DEB_PLATFORMS:-"ubuntu1604"}
 
 if [ -n "${PKG_CI_MODE}" ]; then
 
-  BUILD_TAG=${BUILD_TAG:-pkg.indigo-iam-XXX}
+  M2_VOLUME=${M2_VOLUME:-m2-repo-pkg.indigo-iam}
 
-  M2_REPO_DIR="/tmp/m2-repository/${BUILD_TAG}"
+  docker volume create ${M2_VOLUME}
 
   rm -rf artifacts
   mkdir -p artifacts/packages artifacts/stage-area 
@@ -16,7 +16,7 @@ if [ -n "${PKG_CI_MODE}" ]; then
 
   volumes_conf="-v $(pwd)/artifacts/packages:/packages"
   volumes_conf="${volumes_conf} -v $(pwd)/artifacts/stage-area:/stage-area"
-  volumes_conf="${volumes_conf} -v ${M2_REPO_DIR}:/m2-repository"
+  volumes_conf="${volumes_conf} -v ${M2_VOLUME}:/m2-repository"
 
   export PKG_VOLUMES_CONF=${volumes_conf}
 
