@@ -20,8 +20,6 @@ pipeline {
     STABLE_REPO = "indigo-iam-rpm-stable"
     PKG_NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
     PKG_NEXUS_CRED = credentials('jenkins-nexus')
-    PKG_NEXUS_USERNAME = ${env.PKG_NEXUS_CRED_USR}
-    PKG_NEXUS_PASSWORD = ${env.PKG_NEXUS_CRED_PSW}
   }
 
   stages{
@@ -40,7 +38,7 @@ pipeline {
         PKG_TARGET = "make publish-rpm"
       }
       steps {
-        sh './build.sh'
+        sh 'PKG_NEXUS_USERNAME=${PKG_NEXUS_CRED_USR} PKG_NEXUS_PASSWORD=${PKG_NEXUS_CRED_PSW} ./build.sh'
       }
     }
   }
