@@ -21,7 +21,7 @@ pipeline {
       steps {
 	      cleanWs notFailBuild: true
 	      checkout scm
-	      sh 'build.sh'
+	      sh './build.sh'
               archiveArtifacts 'artifacts/**'
       }
     }
