@@ -20,7 +20,8 @@ override_dh_auto_install:
 	mkdir -p debian/var/lib/indigo/iam-login-service debian/etc/default debian/lib/systemd/system && \
 	cp $(HOME)/sources/iam-login-service/iam-login-service/target/iam-login-service.war debian/var/lib/indigo/iam-login-service/ && \
 	cp $(HOME)/sources/iam-login-service/debian/etc/default/iam-login-service debian/etc/default/ && \
-	cp $(HOME)/sources/iam-login-service/debian/lib/systemd/system/iam-login-service.service debian/lib/systemd/system/ 
+	cp $(HOME)/sources/iam-login-service/debian/lib/systemd/system/iam-login-service.service debian/lib/systemd/system/ && \
+	mkdir -p debian/etc/iam-login-service/config
 
 override_dh_auto_clean:
 	echo

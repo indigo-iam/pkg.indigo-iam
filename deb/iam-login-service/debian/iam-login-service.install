@@ -6,4 +6,5 @@ debian/lib/systemd/system/iam-login-service.service lib/systemd/system
 
 ## others
 debian/var/lib/indigo/iam-login-service/iam-login-service.war var/lib/indigo/iam-login-service
+debian/etc/iam-login-service/config etc/iam-login-service
 

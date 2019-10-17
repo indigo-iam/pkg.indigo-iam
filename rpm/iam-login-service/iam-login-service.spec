@@ -20,7 +20,7 @@ Summary:	INDIGO Identity and Access Management Service.
 
 Group:		Applications/Web
 License:	apache2
-URL:		https://github.com/indigo-dc/iam
+URL:		https://github.com/indigo-iam/iam
 
 BuildArch: noarch
 BuildRequires: java-%{jdk_version}-openjdk-devel
@@ -44,6 +44,7 @@ cd ${RPM_BUILD_ROOT}
 mkdir -p var/lib/indigo/%{name}
 mkdir -p usr/lib/systemd/system
 mkdir -p etc/sysconfig
+mkdir -p etc/%{name}/config
 cp $HOME/sources/%{name}/%{name}/target/%{name}.war var/lib/indigo/%{name}
 cp $HOME/sources/%{name}/rpm/SOURCES/%{name}.service usr/lib/systemd/system
 cp $HOME/sources/%{name}/rpm/SOURCES/%{name} etc/sysconfig
@@ -68,6 +69,8 @@ systemctl daemon-reload
 
 %files
 %config(noreplace) /etc/sysconfig/iam-login-service
+%dir /etc/%{name}
+%dir /etc/%{name}/config
 %dir /var/lib/indigo
 %dir /var/lib/indigo/%{name}
 /var/lib/indigo/%{name}/%{name}.war

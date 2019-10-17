@@ -7,7 +7,7 @@ Priority: optional
 
 Package: iam-login-service
 Architecture: all
-Depends: java8-runtime
+Depends: openjdk-8-jre-headless
 Description: INDIGO Identity and Access Management Service.
  The INDIGO IAM (Identity and Access Management service) provides 
  user identity and policy information to services so that consistent 
