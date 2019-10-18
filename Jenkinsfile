@@ -76,7 +76,7 @@ pipeline {
     stage('package') {
       steps {
         script {
-          def buildStages = PLATFORMS.collectEntries {
+          def buildStages = env.PLATFORMS.collectEntries {
             [ "${it} build packages" : buildPackages(${it}) ]
           }
           parallel buildStages
