@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def platform2Dir[:] = {
+def platform2Dir = {
   "centos7" : 'rpm',
   "centos8" : 'rpm',
   "ubuntu1604" : 'deb',
