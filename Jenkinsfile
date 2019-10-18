@@ -18,7 +18,7 @@ pipeline {
     PKG_TAG = "${env.BRANCH_NAME}"
     DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
     RPM_PLATFORMS = "centos7 centos8"
-    DEB_PLATFORMS = "ubuntu1604"
+    DEB_PLATFORMS = "ubuntu1604 ubuntu1804"
     CI_REPO = "indigo-iam-rpm-ci"
     NIGHTLY_REPO = "indigo-iam-rpm-nightly"
     BETA_REPO = "indigo-iam-rpm-beta"
@@ -66,7 +66,7 @@ pipeline {
 
     stage('publish-beta') {
       when {
-        tag pattern: 'v\\d.*-beta', comparator: "REGEXP"
+        branch 'beta'
       }
 
       environment {
@@ -81,7 +81,7 @@ pipeline {
 
     stage('publish-stable') {
       when {
-        tag pattern: 'v\\d.*-stable', comparator: "REGEXP"
+        branch 'stable'
       }
 
       environment {
