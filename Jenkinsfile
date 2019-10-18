@@ -1,5 +1,42 @@
 #!/usr/bin/env groovy
 
+def platform2Dir[:] = {
+  "centos7" : 'rpm',
+  "centos8" : 'rpm',
+  "ubuntu1604" : 'deb',
+  "ubuntu1804" : 'deb'
+}
+
+def publishPackages(platform) {
+  unstash "source"
+
+  def platformDir = platform2Dir[platform]
+
+  if (!platformDir) {
+    error("Unknown platform: ${platform}")
+  }
+
+  dir(platformDir) {
+    // sh "PLATFORM=${platform} pkg-build.sh"
+    sh "echo Packaging platform: ${platform}"
+  }
+}
+
+def buildPackages(platform) {
+  unstash "source"
+
+  def platformDir = platform2Dir[platform]
+
+  if (!platformDir) {
+    error("Unknown platform: ${platform}")
+  }
+
+  dir(platformDir) {
+    // sh "PLATFORM=${platform} pkg-build.sh"
+    sh "echo Building platform: ${platform}"
+  }
+}
+
 pipeline {
   agent {
     label 'docker'
@@ -17,8 +54,7 @@ pipeline {
   environment {
     PKG_TAG = "${env.BRANCH_NAME}"
     DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
-    RPM_PLATFORMS = "centos7 centos8"
-    DEB_PLATFORMS = "ubuntu1604 ubuntu1804"
+    PLATFORMS = "centos7 centos8 ubuntu1604"
     CI_REPO = "indigo-iam-rpm-ci"
     NIGHTLY_REPO = "indigo-iam-rpm-nightly"
     BETA_REPO = "indigo-iam-rpm-beta"
@@ -29,11 +65,22 @@ pipeline {
   }
 
   stages{
+    stage('checkout') {
+      steps {
+        cleanWs notFailBuild: true
+        checkout scm
+        stash name: "source", includes: "**"
+      }
+    }
+
     stage('package') {
       steps {
-	      cleanWs notFailBuild: true
-	      checkout scm
-	      sh './build.sh'
+        script {
+          def buildStages = PLATFORMS.collectEntries {
+            [ "${it} build packages" : buildPackages(${it}) ]
+          }
+          parallel buildStages
+        }
       }
     }
 
@@ -44,7 +91,12 @@ pipeline {
         PKG_TARGET = "make publish-rpm"
       }
       steps {
-        sh 'PKG_NEXUS_USERNAME=${PKG_NEXUS_CRED_USR} PKG_NEXUS_PASSWORD=${PKG_NEXUS_CRED_PSW} ./build.sh'
+        script {
+          def buildStages = PLATFORMS.collectEntries {
+            [ "${it} publish packages (CI)" : publishPackages(${it}) ]
+          }
+          parallel buildStages
+        }
       }
     }
 
