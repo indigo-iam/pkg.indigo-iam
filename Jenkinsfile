@@ -7,35 +7,40 @@ def platform2Dir = [
   "ubuntu1804" : 'deb'
 ]
 
-def publishPackages(platform) {
-  unstash "source"
+def publishPackages(platform, platform2Dir) {
+  return {
+    unstash "source"
 
-  def platformDir = platform2Dir[platform]
+    def platformDir = platform2Dir[platform]
 
-  if (!platformDir) {
-    error("Unknown platform: ${platform}")
+    if (!platformDir) {
+      error("Unknown platform: ${platform}")
+    }
+
+    dir(platformDir) {
+      // sh "PLATFORM=${platform} pkg-build.sh"
+      sh "echo Packaging platform: ${platform}"
+    }
   }
+}
 
-  dir(platformDir) {
-    // sh "PLATFORM=${platform} pkg-build.sh"
-    sh "echo Packaging platform: ${platform}"
+def buildPackages(platform, platform2Dir) {
+  return {
+    unstash "source"
+
+    def platformDir = platform2Dir[platform]
+
+    if (!platformDir) {
+      error("Unknown platform: ${platform}")
+    }
+
+    dir(platformDir) {
+      // sh "PLATFORM=${platform} pkg-build.sh"
+      sh "echo Building platform: ${platform}"
+    }
   }
 }
 
-def buildPackages(platform) {
-  unstash "source"
-
-  def platformDir = platform2Dir[platform]
-
-  if (!platformDir) {
-    error("Unknown platform: ${platform}")
-  }
-
-  dir(platformDir) {
-    // sh "PLATFORM=${platform} pkg-build.sh"
-    sh "echo Building platform: ${platform}"
-  }
-}
 
 pipeline {
   agent {
@@ -76,7 +81,7 @@ pipeline {
     stage('package') {
       steps {
         script {
-          def buildStages = env.PLATFORMS.collectEntries {
+          def buildStages = PLATFORMS.split(' ').collectEntries {
             [ "${it} build packages" : buildPackages(${it}) ]
           }
           parallel buildStages
@@ -92,7 +97,7 @@ pipeline {
       }
       steps {
         script {
-          def buildStages = PLATFORMS.collectEntries {
+          def buildStages = PLATFORMS.split(' ').collectEntries {
             [ "${it} publish packages (CI)" : publishPackages(${it}) ]
           }
           parallel buildStages
@@ -112,7 +117,7 @@ pipeline {
         PKG_TARGET = "make publish-rpm"
       }
       steps {
-        sh 'PKG_NEXUS_USERNAME=${PKG_NEXUS_CRED_USR} PKG_NEXUS_PASSWORD=${PKG_NEXUS_CRED_PSW} ./build.sh'
+        echo "tbd"
       }
     }
 
@@ -127,7 +132,7 @@ pipeline {
         PKG_TARGET = "make publish-rpm"
       }
       steps {
-        sh 'PKG_NEXUS_USERNAME=${PKG_NEXUS_CRED_USR} PKG_NEXUS_PASSWORD=${PKG_NEXUS_CRED_PSW} ./build.sh'
+        echo "tbd"
       }
     }
 
@@ -143,7 +148,7 @@ pipeline {
       }
 
       steps {
-        sh 'PKG_NEXUS_USERNAME=${PKG_NEXUS_CRED_USR} PKG_NEXUS_PASSWORD=${PKG_NEXUS_CRED_PSW} ./build.sh'
+        echo "tbd"
       }
     }
   }
