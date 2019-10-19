@@ -82,7 +82,7 @@ pipeline {
       steps {
         script {
           def buildStages = PLATFORMS.split(' ').collectEntries {
-            [ "${it} build packages" : buildPackages(${it}) ]
+            [ "${it} build packages" : buildPackages(it, platform2Dir) ]
           }
           echo "${buildStages}"
           parallel buildStages
@@ -99,7 +99,7 @@ pipeline {
       steps {
         script {
           def buildStages = PLATFORMS.split(' ').collectEntries {
-            [ "${it} publish packages (CI)" : publishPackages(${it}) ]
+            [ "${it} publish packages (CI)" : publishPackages(it, platform2Dir) ]
           }
           parallel buildStages
         }
