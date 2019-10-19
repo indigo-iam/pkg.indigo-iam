@@ -18,7 +18,7 @@ def publishPackages(platform, platform2Dir) {
     }
 
     dir(platformDir) {
-      sh "PLATFORM=${platform} pkg-build.sh"
+      echo "tbd"
     }
   }
 }
@@ -34,8 +34,7 @@ def buildPackages(platform, platform2Dir) {
     }
 
     dir(platformDir) {
-      // sh "PLATFORM=${platform} pkg-build.sh"
-      sh "echo Building platform: ${platform}"
+      sh "PLATFORM=${platform} pkg-build.sh"
     }
   }
 }
