@@ -18,8 +18,7 @@ def publishPackages(platform, platform2Dir) {
     }
 
     dir(platformDir) {
-      // sh "PLATFORM=${platform} pkg-build.sh"
-      sh "echo Packaging platform: ${platform}"
+      sh "PLATFORM=${platform} pkg-build.sh"
     }
   }
 }
