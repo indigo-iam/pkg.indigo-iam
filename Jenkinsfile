@@ -84,6 +84,7 @@ pipeline {
           def buildStages = PLATFORMS.split(' ').collectEntries {
             [ "${it} build packages" : buildPackages(${it}) ]
           }
+          echo "${buildStages}"
           parallel buildStages
         }
       }
