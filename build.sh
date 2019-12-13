@@ -1,21 +1,26 @@
 #!/bin/bash
 set -ex
 
-RPM_PLATFORMS=${RPM_PLATFORMS:-"centos7"}
-DEB_PLATFORMS=${DEB_PLATFORMS:-""}
+PLATFORMS=${PLATFORMS:-"centos7 ubuntu1604"}
+
+rm -rf artifacts
+mkdir -p artifacts
+
+export PKG_BUILD_COPY_ARTIFACTS=y
+export PKG_BUILD_COPY_ARTIFACTS_DIR=$(pwd)/artifacts
 
 export DOCKER_ARGS=${DOCKER_ARGS:-"--rm"}
 
-./setup-volumes.sh
+source ./setup-volumes.sh
 
-for p in ${RPM_PLATFORMS}; do
-  pushd rpm
-  PLATFORM=${p} pkg-build.sh
-  popd
-done
-
-for p in ${DEB_PLATFORMS}; do
-  pushd deb
+for p in ${PLATFORMS}; do
+  if [[ "${p}" =~ ^centos ]]; then
+    dir=rpm
+  else
+    dir=deb
+  fi
+  echo "Platform dir: ${p} -> ${dir}"
+  pushd ${dir}
   PLATFORM=${p} pkg-build.sh
   popd
 done
