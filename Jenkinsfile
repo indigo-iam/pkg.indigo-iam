@@ -7,22 +7,6 @@ def platform2Dir = [
   "ubuntu1804" : 'deb'
 ]
 
-def publishPackages(platform, platform2Dir) {
-  return {
-    unstash "source"
-
-    def platformDir = platform2Dir[platform]
-
-    if (!platformDir) {
-      error("Unknown platform: ${platform}")
-    }
-
-    dir(platformDir) {
-      echo "tbd"
-    }
-  }
-}
-
 def buildPackages(platform, platform2Dir) {
   return {
     unstash "source"
@@ -39,7 +23,6 @@ def buildPackages(platform, platform2Dir) {
   }
 }
 
-
 pipeline {
   agent {
     label 'docker'
@@ -50,29 +33,33 @@ pipeline {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
 
-  parameters {
-    booleanParam(name: 'SKIP_BUILD', defaultValue: false, description: 'Skip package build')
-  }
-  
   environment {
     PKG_TAG = "${env.BRANCH_NAME}"
     DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
-    PLATFORMS = "centos7 centos8 ubuntu1604"
-    CI_REPO = "indigo-iam-rpm-ci"
-    NIGHTLY_REPO = "indigo-iam-rpm-nightly"
-    BETA_REPO = "indigo-iam-rpm-beta"
-    STABLE_REPO = "indigo-iam-rpm-stable"
-    PKG_NEXUS_HOST = "https://repo.cloud.cnaf.infn.it"
-    PKG_NEXUS_CRED = credentials('jenkins-nexus')
-    DOCKER_ARGS = "--rm -v /opt/cnafsd/helper-scripts/scripts/:/usr/local/bin "
+    PLATFORMS = "centos7 ubuntu1604"
+    PACKAGES_VOLUME = "pkg-vol-${env.BUILD_TAG}"
+    STAGE_AREA_VOLUME = "sa-vol-${env.BUILD_TAG}"
+    PKG_SIGN_PACKAGES = "y"
+    PKG_SIGN_PUB_KEY = "/gpg/indigo-iam-release.pub.gpg"
+    PKG_SIGN_PRI_KEY = "/gpg/indigo-iam-release.pri.gpg"
+    DOCKER_ARGS = "--rm -v /opt/cnafsd/helper-scripts/scripts/:/usr/local/bin -v ${env.HOME}/gpg-keys/indigo-iam:/gpg:ro"
+    PKG_SIGN_KEY_PASSWORD = credentials('indigo-iam-release-key-password')
   }
 
   stages{
     stage('checkout') {
       steps {
-        cleanWs notFailBuild: true
+        deleteDir()
         checkout scm
         stash name: "source", includes: "**"
+      }
+    }
+
+    stage('setup-volumes') {
+      steps {
+        sh 'pwd && ls -lR'
+        sh 'rm -rf artifacts && mkdir -p artifacts'
+        sh './setup-volumes.sh'
       }
     }
 
@@ -82,85 +69,34 @@ pipeline {
           def buildStages = PLATFORMS.split(' ').collectEntries {
             [ "${it} build packages" : buildPackages(it, platform2Dir) ]
           }
-          echo "${buildStages}"
           parallel buildStages
         }
       }
     }
 
-    stage('publish-ci') {
-      environment {
-        PKG_PUBLISH_PACKAGES = "y"
-        PKG_NEXUS_REPONAME = "${env.CI_REPO}/${env.BUILD_TAG}"
-        PKG_TARGET = "make publish-rpm"
-      }
+    stage('archive-artifacts') {
       steps {
-        script {
-          def buildStages = PLATFORMS.split(' ').collectEntries {
-            [ "${it} publish packages (CI)" : publishPackages(it, platform2Dir) ]
-          }
-          parallel buildStages
-        }
+        sh './copy-artifacts.sh'
+        archiveArtifacts "artifacts/**"
       }
     }
 
-    stage('publish-nightly') {
-
-      when {
-        branch 'nightly'
-      }
-
-      environment {
-        PKG_PUBLISH_PACKAGES = "y"
-        PKG_NEXUS_REPONAME = "${env.NIGHTLY_REPO}"
-        PKG_TARGET = "make publish-rpm"
-      }
+    stage('cleanup') {
       steps {
-        echo "tbd"
-      }
-    }
-
-    stage('publish-beta') {
-      when {
-        branch 'beta'
-      }
-
-      environment {
-        PKG_PUBLISH_PACKAGES = "y"
-        PKG_NEXUS_REPONAME = "${env.BETA_REPO}"
-        PKG_TARGET = "make publish-rpm"
-      }
-      steps {
-        echo "tbd"
-      }
-    }
-
-    stage('publish-stable') {
-      when {
-        branch 'stable'
-      }
-
-      environment {
-        PKG_PUBLISH_PACKAGES = "y"
-        PKG_NEXUS_REPONAME = "${env.STABLE_REPO}"
-        PKG_TARGET = "make publish-rpm"
-      }
-
-      steps {
-        echo "tbd"
+          sh 'docker volume rm ${PACKAGES_VOLUME} ${STAGE_AREA_VOLUME} || echo Volume removal failed'
       }
     }
   }
 
   post {
     failure {
-      slackSend channel: "#iam", color: 'danger', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure (<${env.BUILD_URL}|Open>)"
+      slackSend channel: '#iam', color: 'danger', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Failure (<${env.BUILD_URL}|Open>)"
     }
     
     changed {
       script{
         if('SUCCESS'.equals(currentBuild.currentResult)) {
-          slackSend channel: "#iam", color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Back to normal (<${env.BUILD_URL}|Open>)"
+          slackSend channel: '#iam', color: 'good', message: "${env.JOB_NAME} - #${env.BUILD_NUMBER} Back to normal (<${env.BUILD_URL}|Open>)"
         }
       }
     }
