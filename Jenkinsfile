@@ -76,7 +76,7 @@ pipeline {
 
     stage('archive-artifacts') {
       steps {
-        sh './copy-artifacts.sh'
+        sh 'pkg-copy-artifacts.sh'
         archiveArtifacts "artifacts/**"
       }
     }
