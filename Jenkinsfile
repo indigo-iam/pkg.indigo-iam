@@ -2,7 +2,7 @@
 
 def pkg_build_number() {
     now = new Date().format("yyyyMMddHHmmss")
-    return "${env.BUILD_NUMBER}-${now}"
+    return "${env.BUILD_NUMBER}.${now}"
 }
 
 def platform2Dir = [
