@@ -1,5 +1,9 @@
 #!/usr/bin/env groovy
 
+def pkg_build_number() {
+    return new Date().format("yyyyMMddHHmmss")
+}
+
 def platform2Dir = [
   "centos7" : 'rpm',
   "centos8" : 'rpm',
@@ -45,6 +49,7 @@ pipeline {
     DOCKER_ARGS = "--rm -v /opt/cnafsd/helper-scripts/scripts/:/usr/local/bin -v ${env.HOME}/gpg-keys/indigo-iam:/gpg:ro -v ${env.WORKSPACE}/.rpmmacros:/home/build/.rpmmacros:ro"
     PKG_SIGN_KEY_PASSWORD = credentials('indigo-iam-release-key-password')
     INCLUDE_BUILD_NUMBER = "${env.BRANCH_NAME == 'develop' ? '1' : '0'}"
+    PKG_BUILD_NUMBER = "${pkg_build_number()}"
   }
 
   stages{
