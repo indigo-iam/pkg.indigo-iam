@@ -1,8 +1,8 @@
 BUILD_NAME=iam-login-service
 BUILD_REPO=https://github.com/indigo-iam/iam
-BUILD_TAG=v1.5.0.RELEASE
+BUILD_TAG=multi-profile-support
 PKG_REPO=https://github.com/indigo-iam/pkg.indigo-iam
-PKG_TAG=v1.5.0.RELEASE
+PKG_TAG=develop
 PKG_SPEC_FILE=iam-login-service/deb/iam-login-service/debian
 PKG_STAGE_DEBS=1
-TARBALL_VERSION=1.5.0
+TARBALL_VERSION=1.6.0
