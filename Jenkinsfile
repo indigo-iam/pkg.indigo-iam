@@ -1,7 +1,8 @@
 #!/usr/bin/env groovy
 
 def pkg_build_number() {
-    return new Date().format("yyyyMMddHHmmss")
+    now = new Date().format("yyyyMMddHHmmss")
+    return "${env.BUILD_NUMBER}-${now}"
 }
 
 def platform2Dir = [
