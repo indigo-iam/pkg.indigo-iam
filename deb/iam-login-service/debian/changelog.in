@@ -1,3 +1,7 @@
+iam-login-service (1.7.0-@@DEB_REVISION@@) stable; urgency=low
+
+  * Release 1.7.0
+
 iam-login-service (1.6.0-@@DEB_REVISION@@) stable; urgency=low
 
   * Release 1.6.0
