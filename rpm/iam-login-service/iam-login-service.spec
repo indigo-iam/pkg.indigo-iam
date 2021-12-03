@@ -1,5 +1,5 @@
 %define name            iam-login-service
-%define base_version    1.7.1
+%define base_version    1.7.2
 %define base_release    1
 
 %define user            iam
@@ -77,6 +77,9 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Fri Dec 03 2021 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.7.2
+- Release 1.7.2
+
 * Sat Sep 11 2021 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.7.1
 - Release 1.7.1
 
