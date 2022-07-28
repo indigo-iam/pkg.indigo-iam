@@ -4,7 +4,7 @@
 
 %define user            iam
 
-%define jdk_version     1.8.0
+%define jdk_version     17
 %define mvn_version     3.3.0
 
 %if %{?build_number:1}%{!?build_number:0}
@@ -77,8 +77,18 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Thu Jul 28 2022 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.8.0
+- WIP Release 1.8.0
+
+* Fri Dec 03 2021 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.7.2
+- Release 1.7.2
+
+* Sat Sep 11 2021 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.7.1
+- Release 1.7.1
+
 * Fri Aug 31 2020 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.7.0
 - Release 1.7.0
+
 * Fri Dec 13 2019 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.6.0
 - Release 1.6.0
 
