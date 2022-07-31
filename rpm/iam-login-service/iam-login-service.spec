@@ -92,7 +92,7 @@ systemctl daemon-reload
 * Fri Dec 13 2019 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.6.0
 - Release 1.6.0
 
-* Wed Oct 31 2019 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.5.0
+* Thu Oct 31 2019 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.5.0
 - Release 1.5.0
 
 * Thu May 17 2018 Andrea Ceccanti <andrea.ceccanti@cnaf.infn.it> 1.4.0
