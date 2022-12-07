@@ -77,6 +77,9 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Wed Dec 07 2022 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.8.0
+- Release 1.8.0
+
 * Thu Jul 28 2022 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.8.0
 - WIP Release 1.8.0
 
