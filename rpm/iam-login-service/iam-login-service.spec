@@ -1,5 +1,5 @@
 %define name            iam-login-service
-%define base_version    1.8.2p1
+%define base_version    1.8.2p2
 %define base_release    1
 
 %define user            iam
@@ -77,6 +77,9 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Thu Sep 21 2023 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.8.2p1
+- Release 1.8.2p2
+
 * Tue Jul 04 2023 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.8.2p1
 - Release 1.8.2p1
 
