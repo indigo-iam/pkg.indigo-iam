@@ -50,7 +50,7 @@ pipeline {
     PKG_SIGN_PUB_KEY = "/gpg/indigo-iam-release.pub.gpg"
     PKG_SIGN_PRI_KEY = "/gpg/indigo-iam-release.pri.gpg"
     DOCKER_ARGS = "--rm -v /opt/cnafsd/helper-scripts/scripts/:/usr/local/bin -v ${env.HOME}/gpg-keys/indigo-iam:/gpg:ro -v ${env.WORKSPACE}/.rpmmacros:/home/build/.rpmmacros:ro"
-    PKG_SIGN_KEY_PASSWORD = credentials('indigo-iam-release-key-password')
+    // PKG_SIGN_KEY_PASSWORD = credentials('indigo-iam-release-key-password')
     INCLUDE_BUILD_NUMBER = "${env.BRANCH_NAME == 'develop' ? '1' : '0'}"
     PKG_BUILD_NUMBER = "${pkg_build_number()}"
   }
