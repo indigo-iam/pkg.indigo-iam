@@ -10,6 +10,7 @@ def platform2Dir = [
   "centos7java11" : 'rpm',
   "centos7java17" : 'rpm',
   "centos8" : 'rpm',
+  "almalinux9java17": 'rpm',
   "ubuntu1604" : 'deb',
   "ubuntu1804" : 'deb'
 ]
@@ -43,7 +44,7 @@ pipeline {
   environment {
     PKG_TAG = "${env.BRANCH_NAME}"
     DOCKER_REGISTRY_HOST = "${env.DOCKER_REGISTRY_HOST}"
-    PLATFORMS = "centos7java17"
+    PLATFORMS = "almalinux9java17"
     PACKAGES_VOLUME = "pkg-vol-${env.BUILD_TAG}"
     STAGE_AREA_VOLUME = "sa-vol-${env.BUILD_TAG}"
     // PKG_SIGN_PACKAGES = "y"
