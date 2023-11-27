@@ -1,5 +1,5 @@
 %define name            iam-login-service
-%define base_version    1.8.1p2
+%define base_version    1.8.2p2
 %define base_release    1
 
 %define user            iam
