@@ -14,7 +14,7 @@ export DOCKER_ARGS=${DOCKER_ARGS:-"--rm"}
 source ./setup-volumes.sh
 
 for p in ${PLATFORMS}; do
-  if [[ "${p}" =~ ^centos ]]; then
+  if [[ "${p}" =~ ^centos ] || [ "${p}" =~ ^almalinux ]]; then
     dir=rpm
   else
     dir=deb
