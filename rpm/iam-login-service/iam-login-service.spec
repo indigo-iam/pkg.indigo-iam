@@ -1,5 +1,5 @@
 %define name            iam-login-service
-%define base_version    1.10.1
+%define base_version    1.10.2
 %define base_release    1
 
 %define user            iam
@@ -77,6 +77,12 @@ systemctl daemon-reload
 /usr/lib/systemd/system/%{name}.service
 
 %changelog
+* Tue Oct 15 2024 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.10.2
+- Release 1.10.2
+
+* Thu Aug 22 2024 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.10.1
+- Release 1.10.1
+
 * Mon Aug 5 2024 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.10.0
 - Release 1.10.0
 
