@@ -67,6 +67,11 @@ systemctl stop %{name}
 %postun
 systemctl daemon-reload
 
+%transfiletriggerpostun -- /usr/lib/systemd/system/%{name}.service
+if [ -x /usr/bin/rpm ]; then
+    rpm --mark-restart %{name}.service
+fi
+
 %files
 %config(noreplace) /etc/sysconfig/iam-login-service
 %dir /etc/%{name}
