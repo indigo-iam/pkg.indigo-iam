@@ -61,17 +61,16 @@ fi
 chown -R %{user}:%{user} /var/lib/indigo/%{name}
 systemctl daemon-reload
 
+echo "post section"
+if [ $1 -ge 1 ] && [ -x "/usr/lib/systemd/systemd-update-helper" ]; then 
+  /usr/lib/systemd/systemd-update-helper mark-restart-system-units %{name}.service
+fi
+
 %preun
 systemctl stop %{name}
 
 %postun
 systemctl daemon-reload
-
-%transfiletriggerpostun -- /usr/lib/systemd/system/%{name}.service
-echo "transfiletriggerpostun section running ..."
-if [ $1 -ge 1 ] && [ -x "/usr/lib/systemd/systemd-update-helper" ]; then 
-  /usr/lib/systemd/systemd-update-helper mark-restart-system-units %{name}.service
-fi
 
 %files
 %config(noreplace) /etc/sysconfig/iam-login-service
