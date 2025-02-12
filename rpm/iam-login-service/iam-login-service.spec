@@ -68,7 +68,8 @@ systemctl stop %{name}
 systemctl daemon-reload
 
 %transfiletriggerpostun -- /usr/lib/systemd/system/%{name}.service
-if [ $1 -ge 1 ] && [ -x "/usr/lib/systemd/systemd-update-helper" ]; then
+echo "transfiletriggerpostun section running ..."
+if [ $1 -ge 1 ] && [ -x "/usr/lib/systemd/systemd-update-helper" ]; then 
   /usr/lib/systemd/systemd-update-helper mark-restart-system-units %{name}.service
 fi
 
