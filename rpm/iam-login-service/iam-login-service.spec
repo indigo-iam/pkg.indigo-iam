@@ -40,46 +40,41 @@ cd $HOME/sources/%{name}
 mvn -U -B -DskipTests clean package
 
 %install
-cd ${RPM_BUILD_ROOT}
-mkdir -p var/lib/indigo/%{name}
-mkdir -p usr/lib/systemd/system
-mkdir -p etc/sysconfig
-mkdir -p etc/%{name}/config
-cp $HOME/sources/%{name}/%{name}/target/%{name}.war var/lib/indigo/%{name}
-cp $HOME/sources/%{name}/rpm/SOURCES/%{name}.service usr/lib/systemd/system
-cp $HOME/sources/%{name}/rpm/SOURCES/%{name} etc/sysconfig
+install -d %{buildroot}/var/lib/indigo/%{name}
+install -d %{buildroot}/etc/%{name}/config
+install -D -m 0644 $HOME/sources/%{name}/%{name}/target/%{name}.war %{buildroot}/var/lib/indigo/%{name}/%{name}.war
+install -D -m 0644 $HOME/sources/%{name}/rpm/SOURCES/%{name}.service %{buildroot}%{_unitdir}/%{name}.service
+install -D -m 0644 $HOME/sources/%{name}/rpm/SOURCES/%{name} %{buildroot}/etc/sysconfig/%{name}
 
 %clean
 
 %pre
 
 %post
-/usr/bin/id -u %{user} > /dev/null 2>&1
-if [ $? -eq 1 ]; then
-  useradd --comment "INDIGO IAM" --system --user-group --home-dir /var/lib/indigo/%{name} --no-create-home --shell /sbin/nologin %{user}
+# Ensure the user exists before assigning ownership
+if ! id %{user} &>/dev/null; then
+  useradd --comment "INDIGO IAM" --system --user-group --home-dir /var/lib/indigo/%{name} --no-create-home --shell %{_sbindir}/nologin %{user}
 fi
 chown -R %{user}:%{user} /var/lib/indigo/%{name}
-systemctl daemon-reload
 
-echo "post section"
-if [ $1 -ge 1 ] && [ -x "/usr/lib/systemd/systemd-update-helper" ]; then 
-  /usr/lib/systemd/systemd-update-helper mark-restart-system-units %{name}.service
-fi
+%systemd_post %{name}.service
 
 %preun
-systemctl stop %{name}
+if [ $1 -eq 0 ] && systemctl is-active --quiet %{name}.service; then
+  systemctl stop %{name}.service
+fi
 
 %postun
-systemctl daemon-reload
+%systemd_postun_with_restart %{name}.service
 
 %files
-%config(noreplace) /etc/sysconfig/iam-login-service
+%config(noreplace) /etc/sysconfig/%{name}
 %dir /etc/%{name}
 %dir /etc/%{name}/config
 %dir /var/lib/indigo
 %dir /var/lib/indigo/%{name}
 /var/lib/indigo/%{name}/%{name}.war
-/usr/lib/systemd/system/%{name}.service
+%{_unitdir}/%{name}.service
 
 %changelog
 * Mon Feb 3 2025 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.11.0
