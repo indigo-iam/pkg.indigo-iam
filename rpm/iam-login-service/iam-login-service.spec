@@ -1,5 +1,5 @@
 %define name            iam-login-service
-%define base_version    1.11.0
+%define base_version    1.11.1
 %define base_release    1
 
 %define user            iam
@@ -13,20 +13,19 @@
 %define release_version %{base_release}
 %endif
 
-Name:		%{name}
+Name:		  %{name}
 Version:	%{base_version}
 Release:	%{release_version}%{?dist}
 Summary:	INDIGO Identity and Access Management Service.
 
 Group:		Applications/Web
-License:	apache2
-URL:		https://github.com/indigo-iam/iam
+License:	ASL 2.0
+URL:		  https://github.com/indigo-iam/iam
 
-BuildArch: noarch
+BuildArch:     noarch
 BuildRequires: java-%{jdk_version}-openjdk-devel
 BuildRequires: maven >= %{mvn_version}
-
-Requires:	java-%{jdk_version}-openjdk
+Requires:	     java-%{jdk_version}-openjdk
 
 %description
 The INDIGO IAM (Identity and Access Management service) provides 
@@ -36,47 +35,47 @@ authorization decisions can be enforced across distributed services.
 %prep
 
 %build
-cd $HOME/sources/%{name}
+cd "$HOME/sources/%{name}"
 mvn -U -B -DskipTests clean package
 
 %install
-cd ${RPM_BUILD_ROOT}
-mkdir -p var/lib/indigo/%{name}
-mkdir -p usr/lib/systemd/system
-mkdir -p etc/sysconfig
-mkdir -p etc/%{name}/config
-cp $HOME/sources/%{name}/%{name}/target/%{name}.war var/lib/indigo/%{name}
-cp $HOME/sources/%{name}/rpm/SOURCES/%{name}.service usr/lib/systemd/system
-cp $HOME/sources/%{name}/rpm/SOURCES/%{name} etc/sysconfig
+install -d %{buildroot}/var/lib/indigo/%{name}
+install -d %{buildroot}/%{_sysconfdir}/%{name}/config
+install -d %{buildroot}/%{_sysconfdir}/sysconfig
+install -d %{buildroot}/%{_unitdir}
 
-%clean
-
-%pre
+install -m 644 "$HOME/sources/%{name}/%{name}/target/%{name}.war" %{buildroot}/var/lib/indigo/%{name}/
+install -m 644 "$HOME/sources/%{name}/rpm/SOURCES/%{name}.service" %{buildroot}%{_unitdir}/
+install -m 644 "$HOME/sources/%{name}/rpm/SOURCES/%{name}" %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
 %post
-/usr/bin/id -u %{user} > /dev/null 2>&1
-if [ $? -eq 1 ]; then
-  useradd --comment "INDIGO IAM" --system --user-group --home-dir /var/lib/indigo/%{name} --no-create-home --shell /sbin/nologin %{user}
+# Create service user if not exists
+if ! getent passwd %{user} > /dev/null; then
+    useradd --comment "INDIGO IAM" --system --user-group --home-dir /var/lib/indigo/%{name} --no-create-home --shell /sbin/nologin %{user}
 fi
+
 chown -R %{user}:%{user} /var/lib/indigo/%{name}
-systemctl daemon-reload
+%systemd_post %{name}.service
 
 %preun
-systemctl stop %{name}
+%systemd_preun %{name}.service
 
 %postun
-systemctl daemon-reload
+%systemd_postun_with_restart %{name}.service
 
 %files
-%config(noreplace) /etc/sysconfig/iam-login-service
-%dir /etc/%{name}
-%dir /etc/%{name}/config
+%config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%dir %{_sysconfdir}/%{name}
+%dir %{_sysconfdir}/%{name}/config
 %dir /var/lib/indigo
 %dir /var/lib/indigo/%{name}
 /var/lib/indigo/%{name}/%{name}.war
-/usr/lib/systemd/system/%{name}.service
+%{_unitdir}/%{name}.service
 
 %changelog
+* Mon May 19 2025 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.11.1
+- Release 1.11.1
+
 * Mon Feb 3 2025 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.11.0
 - Release 1.11.0
 
