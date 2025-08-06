@@ -1,5 +1,5 @@
 %define name            iam-login-service
-%define base_version    1.12.1
+%define base_version    1.12.2
 %define base_release    1
 
 %define user            iam
@@ -73,6 +73,9 @@ chown -R %{user}:%{user} /var/lib/indigo/%{name}
 %{_unitdir}/%{name}.service
 
 %changelog
+* Tue Aug 5 2025 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.12.2
+- Release 1.12.2
+
 * Mon Aug 4 2025 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.12.1
 - Release 1.12.1
 
