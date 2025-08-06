@@ -1,3 +1,3 @@
 COMPONENTS="iam-login-service"
-PKG_TAG=v1.12.2
+PKG_TAG=latest
 PKG_STAGE_RPMS=1
