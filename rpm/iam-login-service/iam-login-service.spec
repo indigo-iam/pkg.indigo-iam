@@ -73,6 +73,9 @@ chown -R %{user}:%{user} /var/lib/indigo/%{name}
 %{_unitdir}/%{name}.service
 
 %changelog
+* Wed May 28 2025 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.11.2
+- Release 1.11.2
+
 * Mon May 19 2025 Enrico Vianello <enrico.vianello@cnaf.infn.it> 1.11.1
 - Release 1.11.1
 
