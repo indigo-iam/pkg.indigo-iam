@@ -45,8 +45,8 @@ install -d %{buildroot}/%{_sysconfdir}/sysconfig
 install -d %{buildroot}/%{_unitdir}
 
 install -m 644 "$HOME/sources/%{name}/%{name}/target/%{name}.war" %{buildroot}/var/lib/indigo/%{name}/
-install -m 644 "$HOME/sources/%{name}/rpm/SOURCES/%{name}.service" %{buildroot}%{_unitdir}/
-install -m 644 "$HOME/sources/%{name}/rpm/SOURCES/%{name}" %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -m 644 "$HOME/sources/%{name}/%{name}/rpm/SOURCES/%{name}.service" %{buildroot}%{_unitdir}/
+install -m 644 "$HOME/sources/%{name}/%{name}/rpm/SOURCES/%{name}" %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 
 %post
 # Create service user if not exists
