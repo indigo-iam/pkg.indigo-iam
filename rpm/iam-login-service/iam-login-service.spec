@@ -5,7 +5,7 @@
 %define user            iam
 
 %define jdk_version     17
-%define mvn_version     3.8.0
+%define mvn_version     3.3.0
 
 %if %{?build_number:1}%{!?build_number:0}
 %define release_version 0.build.%{build_number}
